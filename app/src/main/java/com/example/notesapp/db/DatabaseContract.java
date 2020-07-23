@@ -5,9 +5,9 @@ import android.provider.BaseColumns;
 public class DatabaseContract {
     static String TABLE_NAME = "note";
 
-    static final class NoteColumns implements BaseColumns{
-        static String TITLE = "title";
-        static String DESCRIPTION = "description";
-        static String DATE = "date";
+    public static final class NoteColumns implements BaseColumns{
+        public static String TITLE = "title";
+        public static String DESCRIPTION = "description";
+        public static String DATE = "date";
     }
 }
