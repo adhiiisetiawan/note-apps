@@ -9,6 +9,9 @@ public class Note implements Parcelable {
     private String description;
     private String date;
 
+    public Note() {
+    }
+
     public Note(int id, String title, String description, String date) {
         this.id = id;
         this.title = title;
