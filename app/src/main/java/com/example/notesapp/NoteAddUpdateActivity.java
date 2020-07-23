@@ -19,8 +19,6 @@ import android.widget.Toast;
 import com.example.notesapp.db.NoteHelper;
 import com.example.notesapp.entity.Note;
 
-import com.example.notesapp.db.DatabaseContract.*;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -115,8 +113,8 @@ public class NoteAddUpdateActivity extends AppCompatActivity implements View.OnC
             intent.putExtra(EXTRA_POSITION, position);
 
             ContentValues values = new ContentValues();
-            values.put(TITLE, title); //tanda tanya
-            values.put(DESCRIPTION, description); //tanda tanya
+            values.put(TITLE, title);
+            values.put(DESCRIPTION, description);
 
             if (isEdit){
                 long result = noteHelper.update(String.valueOf(note.getId()), values);
@@ -135,7 +133,7 @@ public class NoteAddUpdateActivity extends AppCompatActivity implements View.OnC
                     setResult(RESULT_ADD, intent);
                     finish();
                 } else {
-                    Toast.makeText(NoteAddUpdateActivity.this, "Gagal menambah data", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NoteAddUpdateActivity.this, "Failed to add data", Toast.LENGTH_SHORT).show();
                 }
             }
         }
