@@ -1,5 +1,6 @@
 package com.example.notesapp;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -23,6 +25,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements LoadNotesCallback {
+    private static final String EXTRA_STATE = "extra_state";
     private ProgressBar progressBar;
     private RecyclerView rvNote;
     private NoteAdapter noteAdapter;
@@ -57,7 +60,22 @@ public class MainActivity extends AppCompatActivity implements LoadNotesCallback
         noteHelper = NoteHelper.getInstance(getApplicationContext());
         noteHelper.open();
 
-        new LoadNotesAsync(noteHelper, this).execute();
+
+
+        if (savedInstanceState == null){
+            new LoadNotesAsync(noteHelper, this).execute();
+        } else {
+            ArrayList<Note> list = savedInstanceState.getParcelableArrayList(EXTRA_STATE);
+            if (list != null) {
+                noteAdapter.setListNote(list);
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putParcelableArrayList(EXTRA_STATE, noteAdapter.getListNote());
     }
 
     @Override

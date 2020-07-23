@@ -69,7 +69,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         holder.cvNote.setOnClickListener(new CustomOnItemClickListener(position, new CustomOnItemClickListener.OnItemClickCallback() {
             @Override
             public void onItemClickCallback(View view, int position) {
-                //not yet
                 Intent intent = new Intent(activity, NoteAddUpdateActivity.class);
                 intent.putExtra(NoteAddUpdateActivity.EXTRA_POSITION, position);
                 intent.putExtra(NoteAddUpdateActivity.EXTRA_NOTE, noteArrayList.get(position));
