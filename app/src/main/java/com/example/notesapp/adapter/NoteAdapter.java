@@ -71,6 +71,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
             public void onItemClickCallback(View view, int position) {
                 //not yet
                 Intent intent = new Intent(activity, NoteAddUpdateActivity.class);
+                intent.putExtra(NoteAddUpdateActivity.EXTRA_POSITION, position);
+                intent.putExtra(NoteAddUpdateActivity.EXTRA_NOTE, noteArrayList.get(position));
+                activity.startActivityForResult(intent, NoteAddUpdateActivity.REQUEST_UPDATE);
             }
         }));
     }

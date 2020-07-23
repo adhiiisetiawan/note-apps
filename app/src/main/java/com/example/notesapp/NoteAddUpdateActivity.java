@@ -26,9 +26,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static android.provider.CallLog.Calls.DATE;
-import static android.provider.ContactsContract.CommonDataKinds.Organization.TITLE;
-import static android.provider.MediaStore.Video.VideoColumns.DESCRIPTION;
+import static com.example.notesapp.db.DatabaseContract.NoteColumns.DATE;
+import static com.example.notesapp.db.DatabaseContract.NoteColumns.DESCRIPTION;
+import static com.example.notesapp.db.DatabaseContract.NoteColumns.TITLE;
 
 
 public class NoteAddUpdateActivity extends AppCompatActivity implements View.OnClickListener {
