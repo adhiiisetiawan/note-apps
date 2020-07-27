@@ -159,7 +159,7 @@ public class NoteAddUpdateActivity extends AppCompatActivity implements View.OnC
             case R.id.action_delete:
                 showAlertDialog(ALERT_DIALOG_DELETE);
                 break;
-            case R.id.home:
+            case android.R.id.home:
                 showAlertDialog(ALERT_DIALOG_CLOSE);
                 break;
         }
