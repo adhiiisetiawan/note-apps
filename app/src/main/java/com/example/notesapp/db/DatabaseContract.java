@@ -4,7 +4,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 public class DatabaseContract {
-    static String TABLE_NAME = "note";
+    public static String TABLE_NAME = "note";
     public static final String AUTHORITY = "com.example.notesapp";
     private static final String SCHEME = "content";
 
