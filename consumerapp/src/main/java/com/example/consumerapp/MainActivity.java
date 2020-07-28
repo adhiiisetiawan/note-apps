@@ -1,4 +1,4 @@
-package com.example.notesapp;
+package com.example.consumerapp;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,11 +18,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.notesapp.adapter.NoteAdapter;
-import com.example.notesapp.db.DatabaseContract;
-import com.example.notesapp.db.NoteHelper;
-import com.example.notesapp.entity.Note;
-import com.example.notesapp.helper.MappingHelper;
+import com.example.consumerapp.adapter.NoteAdapter;
+import com.example.consumerapp.db.DatabaseContract;
+
+import com.example.consumerapp.entity.Note;
+import com.example.consumerapp.helper.MappingHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements LoadNotesCallback
     private RecyclerView rvNote;
     private NoteAdapter noteAdapter;
     private FloatingActionButton fabAdd;
-    private NoteHelper noteHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements LoadNotesCallback
         setContentView(R.layout.activity_main);
 
         if (getSupportActionBar() != null){
-            getSupportActionBar().setTitle("Notes");
+            getSupportActionBar().setTitle("Consumer Notes");
         }
 
         progressBar = findViewById(R.id.progressbar);
