@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -16,14 +18,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.notesapp.db.NoteHelper;
 import com.example.notesapp.entity.Note;
+import com.example.notesapp.helper.MappingHelper;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import static com.example.notesapp.db.DatabaseContract.NoteColumns.CONTENT_URI;
 import static com.example.notesapp.db.DatabaseContract.NoteColumns.DATE;
 import static com.example.notesapp.db.DatabaseContract.NoteColumns.DESCRIPTION;
 import static com.example.notesapp.db.DatabaseContract.NoteColumns.TITLE;
@@ -37,7 +40,7 @@ public class NoteAddUpdateActivity extends AppCompatActivity implements View.OnC
 
     private Note note;
     private int position;
-    private NoteHelper noteHelper;
+    private Uri uriWithId;
 
     public static final String EXTRA_NOTE = "extra_note";
     public static final String EXTRA_POSITION = "extra_position";
@@ -60,9 +63,6 @@ public class NoteAddUpdateActivity extends AppCompatActivity implements View.OnC
 
         btnSubmit.setOnClickListener(this);
 
-        noteHelper = NoteHelper.getInstance(getApplicationContext());
-        noteHelper.open();
-
         note = getIntent().getParcelableExtra(EXTRA_NOTE);
         if (note != null){
             position = getIntent().getIntExtra(EXTRA_POSITION, 0);
@@ -75,13 +75,22 @@ public class NoteAddUpdateActivity extends AppCompatActivity implements View.OnC
         String btnTitle;
 
         if (isEdit){
-            actionBarTitle = "Change";
-            btnTitle = "Update";
+           uriWithId = Uri.parse(CONTENT_URI + "/" + note.getId());
+           if (uriWithId != null){
+               Cursor cursor = getContentResolver().query(uriWithId, null, null, null, null);
 
-            if (note != null){
-                edtTitle.setText(note.getTitle());
-                edtDescription.setText(note.getDescription());
-            }
+               if (cursor != null){
+                   note = MappingHelper.mapCursorToObject(cursor);
+                   cursor.close();
+               }
+           }
+           actionBarTitle = "Change";
+           btnTitle = "Update";
+
+           if (note != null){
+               edtTitle.setText(note.getTitle());
+               edtDescription.setText(note.getDescription());
+           }
         } else {
             actionBarTitle = "Add";
             btnTitle = "Save";
@@ -117,24 +126,15 @@ public class NoteAddUpdateActivity extends AppCompatActivity implements View.OnC
             values.put(DESCRIPTION, description);
 
             if (isEdit){
-                long result = noteHelper.update(String.valueOf(note.getId()), values);
-                if (result > 0){
-                    setResult(RESULT_UPDATE, intent);
-                    finish();
-                } else {
-                    Toast.makeText(NoteAddUpdateActivity.this, "Update failed", Toast.LENGTH_SHORT).show();
-                }
+                getContentResolver().update(uriWithId, values, null, null);
+                Toast.makeText(this, "One item succesfully edit", Toast.LENGTH_SHORT).show();
+                finish();
             } else {
                 note.setDate(getCurrentDate());
                 values.put(DATE, getCurrentDate());
-                long result = noteHelper.insert(values);
-                if (result > 0) {
-                    note.setId((int) result);
-                    setResult(RESULT_ADD, intent);
-                    finish();
-                } else {
-                    Toast.makeText(NoteAddUpdateActivity.this, "Failed to add data", Toast.LENGTH_SHORT).show();
-                }
+                getContentResolver().insert(CONTENT_URI, values);
+                Toast.makeText(this, "One item successfully added", Toast.LENGTH_SHORT).show();
+                finish();
             }
         }
     }
@@ -195,15 +195,9 @@ public class NoteAddUpdateActivity extends AppCompatActivity implements View.OnC
                         if (isDialogClose){
                             finish();
                         } else {
-                            long result = noteHelper.deleteById(String.valueOf(note.getId()));
-                            if (result > 0){
-                                Intent intent = new Intent();
-                                intent.putExtra(EXTRA_POSITION, position);
-                                setResult(RESULT_DELETE, intent);
-                                finish();
-                            } else {
-                                Toast.makeText(NoteAddUpdateActivity.this, "Failed delete data", Toast.LENGTH_SHORT).show();
-                            }
+                            getContentResolver().delete(uriWithId, null, null);
+                            Toast.makeText(NoteAddUpdateActivity.this, "One item successfully deleted", Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     }
                 })
